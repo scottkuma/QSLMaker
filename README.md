@@ -8,4 +8,5 @@ Change code for input adif file & other required files (e.g., font files [not in
 ## Usage:  
 python3 qslmaker.py
 
+## Example Output:
 ![Example Output](https://raw.githubusercontent.com/scottkuma/QSLMaker/main/out/ab2cd_20201030_203645.jpg)
