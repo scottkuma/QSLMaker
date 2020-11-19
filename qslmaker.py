@@ -107,7 +107,7 @@ for qso in adif[0]:
     qso_mode = qso['MODE']
     drawCenteredText(qso_mode, fields['mode'], bold_font, black)
 
-    #QSO mode
+    #RST
     rst = qso['RST_SENT']
     drawCenteredText(rst, fields['rst'], bold_font, black)
 
