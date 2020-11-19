@@ -1,5 +1,5 @@
 import adif_io as aio
-#import pprint
+import pprint
 from PIL import Image, ImageDraw, ImageFont
 import os
 
@@ -34,6 +34,9 @@ bold_font = ImageFont.truetype(boldfontfile, size=72)
 
 freq_font = ImageFont.truetype(fontfile, size=60)
 
+sigfontfile = 'Autography/Autography.otf'
+sig_font = ImageFont.truetype(sigfontfile, size=72)
+
 imageinfo = [{'filename': '20081010-DigitalQSL.jpg',
              'fields':{
                  'to_radio': {'offset':(100,754), 'size':(350,108)},
@@ -60,25 +63,29 @@ imageinfo = [{'filename': '20081010-DigitalQSL.jpg',
                  'rst': {'offset':(1538,754), 'size':(185,108)},
                  'confirm_qso': {'offset':(1130, 501), 'size':(52,52)},
                  'pse_qsl': {'offset':(90, 498), 'size':(52,52)},
-                 '73': {'offset':(1196, 895), 'size':(518,107)}
+                 '73': {'offset':(1250, 880), 'size':(518,160)}
                  }}
              ]
 
 CARDNO = 1
+fields = imageinfo[CARDNO]['fields']
 
 adif_file = "wsjtx_log_ORIG.adi"
-
 adif = aio.read_from_file(adif_file)
+
+sig_img = Image.open("Scott_Trans.png")
+ratio =  sig_img.height / fields['73']['size'][1]
+(im_w, im_h) = (int(sig_img.width // ratio), int(sig_img.height // ratio))
+sig_img_r = sig_img.resize((im_w, im_h))
 
 black = 'rgb(0,0,0)'
 red = 'rgb(255,0,0)'
-
-
+blue= 'rgb(0,0,255)'
 
 for qso in adif[0]:
     print(f"Working on {qso['CALL']}")
     image = Image.open(imageinfo[CARDNO]['filename'])
-    fields = imageinfo[CARDNO]['fields']
+
     #print(fields)
     draw = ImageDraw.Draw(image)
     #Call
@@ -117,6 +124,10 @@ for qso in adif[0]:
     #pse QSL
     #draw.text(imageinfo['pse_qsl'], 'x', fill=red, font=bold_font)
     drawCenteredText('x', fields['pse_qsl'], bold_font, red)
+
+    #73
+    #drawCenteredText('de Scott N8VSI', fields['73'], sig_font, blue)
+    image.paste(sig_img_r,fields['73']['offset'],mask=sig_img_r)
 
     filecall = slugify(qso['CALL'])
     filedatetime = str(qso['QSO_DATE'][:4])+str(month)+str(day) + '_' + str(qso['TIME_ON'])
