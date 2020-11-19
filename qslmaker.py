@@ -1,5 +1,5 @@
 import adif_io as aio
-import pprint
+#import pprint
 from PIL import Image, ImageDraw, ImageFont
 import os
 
